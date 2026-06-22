@@ -110,14 +110,21 @@
     }
 
     .login-success {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 22px;
+      font-weight: 800;
       color: #1b5e20;
       background: #e8f5e9;
-      border-radius: 6px;
-      padding: 4px 10px;
-      display: inline-block;
-      margin-bottom: 12px;
+      border: 2px solid #a5d6a7;
+      border-radius: 12px;
+      padding: 14px 24px;
+      display: block;
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .login-success::before {
+      content: '✓ ';
     }
 
     .user-name {
@@ -299,7 +306,7 @@
 
     <div class="dashboard-header">
       <div class="login-success">ログイン成功</div>
-      <div class="user-name">山田 太郎</div>
+      <div class="user-name">テスト 太郎</div>
       <div class="user-email">test@test.example</div>
       <div class="status-chip">ログイン済み</div>
     </div>
@@ -308,7 +315,7 @@
     <div class="info-grid">
       <div class="info-tile">
         <div class="tile-key">氏名</div>
-        <div class="tile-value">山田 太郎</div>
+        <div class="tile-value">テスト 太郎</div>
       </div>
       <div class="info-tile">
         <div class="tile-key">所属</div>
