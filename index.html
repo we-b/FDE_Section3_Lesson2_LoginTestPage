@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン練習ページ — FDE Lesson2</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', 'Noto Sans JP', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #1d1d1f;
+    }
+
+    .practice-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff3cd;
+      border: 1px solid #ffd966;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #7a5800;
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      padding: 40px 40px 36px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    /* ── Login page ── */
+
+    .login-header {
+      margin-bottom: 28px;
+    }
+
+    .login-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .login-header p {
+      font-size: 13px;
+      color: #6e6e73;
+    }
+
+    .credentials-box {
+      background: #f5f5f7;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 28px;
+    }
+
+    .credentials-box .box-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #6e6e73;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .credential-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+    }
+
+    .credential-row + .credential-row {
+      border-top: 1px solid #e5e5ea;
+      margin-top: 5px;
+    }
+
+    .credential-row .cred-label {
+      font-size: 13px;
+      color: #6e6e73;
+    }
+
+    .credential-row .cred-value {
+      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid #d2d2d7;
+      border-radius: 6px;
+      padding: 3px 10px;
+      color: #1d1d1f;
+      user-select: all;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .field-group input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #d2d2d7;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+      background: #fafafa;
+    }
+
+    .field-group input:focus {
+      border-color: #0071e3;
+      background: #fff;
+    }
+
+    .error-msg {
+      display: none;
+      font-size: 13px;
+      color: #ff3b30;
+      background: #fff2f2;
+      border: 1px solid #ffd0ce;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: #0071e3;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: #006ad4; }
+    .btn-primary:active { background: #005ec0; }
+
+    /* ── Dashboard page ── */
+
+    .dashboard-header {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .user-name {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .user-email {
+      font-size: 13px;
+      color: #6e6e73;
+      margin-top: 2px;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #e8f5e9;
+      color: #1b5e20;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+
+    .status-chip::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: #4caf50;
+      border-radius: 50%;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #6e6e73;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .info-tile {
+      background: #f5f5f7;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .info-tile .tile-key {
+      font-size: 11px;
+      color: #6e6e73;
+      margin-bottom: 4px;
+    }
+
+    .info-tile .tile-value {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .notice-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .notice-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .notice-item:last-child { border-bottom: none; }
+
+    .notice-date {
+      font-size: 11px;
+      color: #6e6e73;
+      white-space: nowrap;
+      padding-top: 2px;
+      min-width: 72px;
+    }
+
+    .notice-title {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .notice-new {
+      display: inline-block;
+      background: #ff3b30;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 12px;
+      background: #fff;
+      color: #ff3b30;
+      border: 1.5px solid #ff3b30;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-logout:hover {
+      background: #fff5f5;
+    }
+
+    /* ── Footer ── */
+
+    .footer {
+      margin-top: 18px;
+      font-size: 11px;
+      color: #aeaeb2;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── Hidden by default ── */
+    [data-page] { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="practice-badge">⚠️ 練習専用ページ ― 入力内容は外部へ送信されません</div>
+
+  <!-- ══ LOGIN PAGE ══ -->
+  <div data-page="login" class="card">
+
+    <div class="login-header">
+      <h1>ログイン</h1>
+      <p>FDE Lesson2 ブラウザ自動操作エージェント 練習用</p>
+    </div>
+
+    <div class="credentials-box">
+      <div class="box-title">📋 練習用アカウント（このページ専用）</div>
+      <div class="credential-row">
+        <span class="cred-label">メールアドレス</span>
+        <span class="cred-value">test@test.example</span>
+      </div>
+      <div class="credential-row">
+        <span class="cred-label">パスワード</span>
+        <span class="cred-value">password</span>
+      </div>
+    </div>
+
+    <div id="error-msg" class="error-msg">
+      メールアドレスまたはパスワードが違います。
+    </div>
+
+    <div class="field-group">
+      <label for="email">メールアドレス</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="test@test.example"
+        autocomplete="username"
+      />
+    </div>
+
+    <div class="field-group">
+      <label for="password">パスワード</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="パスワード"
+        autocomplete="current-password"
+      />
+    </div>
+
+    <button class="btn-primary" id="login-btn">ログイン</button>
+
+  </div>
+
+  <!-- ══ DASHBOARD PAGE ══ -->
+  <div data-page="dashboard" class="card">
+
+    <div class="dashboard-header">
+      <div class="user-name">山田 太郎</div>
+      <div class="user-email">test@test.example</div>
+      <div class="status-chip">ログイン済み</div>
+    </div>
+
+    <div class="section-title">アカウント情報</div>
+    <div class="info-grid">
+      <div class="info-tile">
+        <div class="tile-key">氏名</div>
+        <div class="tile-value">山田 太郎</div>
+      </div>
+      <div class="info-tile">
+        <div class="tile-key">所属</div>
+        <div class="tile-value">営業部 第1グループ</div>
+      </div>
+      <div class="info-tile">
+        <div class="tile-key">最終ログイン</div>
+        <div class="tile-value" id="last-login-time">—</div>
+      </div>
+    </div>
+
+    <div class="section-title">お知らせ一覧</div>
+    <ul class="notice-list">
+      <li class="notice-item">
+        <span class="notice-date">2026/07/01</span>
+        <span class="notice-title">
+          7月の定期メンテナンスのお知らせ
+          <span class="notice-new">NEW</span>
+        </span>
+      </li>
+      <li class="notice-item">
+        <span class="notice-date">2026/06/20</span>
+        <span class="notice-title">夏季休業期間中のサポート対応について</span>
+      </li>
+      <li class="notice-item">
+        <span class="notice-date">2026/06/10</span>
+        <span class="notice-title">新機能リリース：レポート自動生成機能が追加されました</span>
+      </li>
+      <li class="notice-item">
+        <span class="notice-date">2026/05/28</span>
+        <span class="notice-title">利用規約の改定について（2026年6月1日施行）</span>
+      </li>
+    </ul>
+
+    <button class="btn-logout" id="logout-btn">ログアウト</button>
+
+  </div>
+
+  <div class="footer">
+    FDE Section3 Lesson2 — 練習専用 — 入力内容は外部へ送信されません<br>
+    実際の認証機能はありません。このページは教育目的のシミュレーターです。
+  </div>
+
+  <script>
+    const VALID_EMAIL    = 'test@test.example';
+    const VALID_PASSWORD = 'password';
+    const SESSION_KEY    = 'fde_lesson2_auth';
+    const COOKIE_NAME    = 'fde_lesson2_session';
+
+    // ── Session helpers ──────────────────────────────────────
+
+    function saveSession() {
+      const data = {
+        loggedIn:  true,
+        user:      VALID_EMAIL,
+        loginTime: new Date().toISOString(),
+      };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+
+      // Cookie（HTTP/HTTPS 環境で storageState に含まれる）
+      document.cookie =
+        COOKIE_NAME + '=authenticated' +
+        '; path=/' +
+        '; max-age=86400' +
+        '; SameSite=Lax';
+    }
+
+    function clearSession() {
+      localStorage.removeItem(SESSION_KEY);
+      document.cookie =
+        COOKIE_NAME + '=' +
+        '; path=/' +
+        '; max-age=0';
+    }
+
+    function loadSession() {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+
+    // ── Page switching ───────────────────────────────────────
+
+    function showPage(name) {
+      document.querySelectorAll('[data-page]').forEach(function(el) {
+        el.style.display = el.dataset.page === name ? 'block' : 'none';
+      });
+    }
+
+    function showDashboard(session) {
+      showPage('dashboard');
+      if (session && session.loginTime) {
+        var d = new Date(session.loginTime);
+        document.getElementById('last-login-time').textContent =
+          d.toLocaleString('ja-JP', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit',
+          });
+      }
+    }
+
+    function showLogin() {
+      showPage('login');
+      document.getElementById('error-msg').style.display = 'none';
+      document.getElementById('email').value    = '';
+      document.getElementById('password').value = '';
+    }
+
+    // ── Login / Logout ───────────────────────────────────────
+
+    function doLogin() {
+      var email    = document.getElementById('email').value.trim();
+      var password = document.getElementById('password').value;
+      var errorEl  = document.getElementById('error-msg');
+
+      if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+        errorEl.style.display = 'none';
+        saveSession();
+        showDashboard(loadSession());
+      } else {
+        errorEl.style.display = 'block';
+      }
+    }
+
+    function doLogout() {
+      clearSession();
+      showLogin();
+    }
+
+    // ── Event listeners ──────────────────────────────────────
+
+    document.getElementById('login-btn').addEventListener('click', doLogin);
+    document.getElementById('logout-btn').addEventListener('click', doLogout);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        var loginPage = document.querySelector('[data-page="login"]');
+        if (loginPage && loginPage.style.display !== 'none') doLogin();
+      }
+    });
+
+    // ── Init ─────────────────────────────────────────────────
+
+    var session = loadSession();
+    if (session && session.loggedIn) {
+      showDashboard(session);
+    } else {
+      showLogin();
+    }
+  </script>
+</body>
+</html>
