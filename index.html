@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ログイン練習ページ — FDE Lesson2</title>
+  <title>ログイン練習ページ</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -17,21 +17,6 @@
       justify-content: center;
       padding: 24px;
       color: #1d1d1f;
-    }
-
-    .practice-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff3cd;
-      border: 1px solid #ffd966;
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #7a5800;
-      margin-bottom: 20px;
-      letter-spacing: 0.3px;
     }
 
     .card {
@@ -58,50 +43,6 @@
     .login-header p {
       font-size: 13px;
       color: #6e6e73;
-    }
-
-    .credentials-box {
-      background: #f5f5f7;
-      border-radius: 10px;
-      padding: 16px 18px;
-      margin-bottom: 28px;
-    }
-
-    .credentials-box .box-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #6e6e73;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 12px;
-    }
-
-    .credential-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 5px 0;
-    }
-
-    .credential-row + .credential-row {
-      border-top: 1px solid #e5e5ea;
-      margin-top: 5px;
-    }
-
-    .credential-row .cred-label {
-      font-size: 13px;
-      color: #6e6e73;
-    }
-
-    .credential-row .cred-value {
-      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
-      font-size: 13px;
-      background: #ffffff;
-      border: 1px solid #d2d2d7;
-      border-radius: 6px;
-      padding: 3px 10px;
-      color: #1d1d1f;
-      user-select: all;
     }
 
     .field-group {
@@ -294,11 +235,10 @@
     /* ── Footer ── */
 
     .footer {
-      margin-top: 18px;
+      margin-top: 16px;
       font-size: 11px;
       color: #aeaeb2;
       text-align: center;
-      line-height: 1.6;
     }
 
     /* ── Hidden by default ── */
@@ -307,26 +247,12 @@
 </head>
 <body>
 
-  <div class="practice-badge">⚠️ 練習専用ページ ― 入力内容は外部へ送信されません</div>
-
   <!-- ══ LOGIN PAGE ══ -->
   <div data-page="login" class="card">
 
     <div class="login-header">
       <h1>ログイン</h1>
-      <p>FDE Lesson2 ブラウザ自動操作エージェント 練習用</p>
-    </div>
-
-    <div class="credentials-box">
-      <div class="box-title">📋 練習用アカウント（このページ専用）</div>
-      <div class="credential-row">
-        <span class="cred-label">メールアドレス</span>
-        <span class="cred-value">test@test.example</span>
-      </div>
-      <div class="credential-row">
-        <span class="cred-label">パスワード</span>
-        <span class="cred-value">password</span>
-      </div>
+      <p>練習用ログインページ</p>
     </div>
 
     <div id="error-msg" class="error-msg">
@@ -338,7 +264,7 @@
       <input
         type="email"
         id="email"
-        placeholder="test@test.example"
+        placeholder="example@mail.com"
         autocomplete="username"
       />
     </div>
@@ -409,28 +335,21 @@
 
   </div>
 
-  <div class="footer">
-    FDE Section3 Lesson2 — 練習専用 — 入力内容は外部へ送信されません<br>
-    実際の認証機能はありません。このページは教育目的のシミュレーターです。
-  </div>
+  <div class="footer">練習専用 ― 入力内容は外部へ送信されません</div>
 
   <script>
-    const VALID_EMAIL    = 'test@test.example';
-    const VALID_PASSWORD = 'password';
-    const SESSION_KEY    = 'fde_lesson2_auth';
-    const COOKIE_NAME    = 'fde_lesson2_session';
-
-    // ── Session helpers ──────────────────────────────────────
+    var VALID_EMAIL    = 'test@test.example';
+    var VALID_PASSWORD = 'password';
+    var SESSION_KEY    = 'login_test_auth';
+    var COOKIE_NAME    = 'login_test_session';
 
     function saveSession() {
-      const data = {
+      var data = {
         loggedIn:  true,
         user:      VALID_EMAIL,
         loginTime: new Date().toISOString(),
       };
       localStorage.setItem(SESSION_KEY, JSON.stringify(data));
-
-      // Cookie（HTTP/HTTPS 環境で storageState に含まれる）
       document.cookie =
         COOKIE_NAME + '=authenticated' +
         '; path=/' +
@@ -440,19 +359,14 @@
 
     function clearSession() {
       localStorage.removeItem(SESSION_KEY);
-      document.cookie =
-        COOKIE_NAME + '=' +
-        '; path=/' +
-        '; max-age=0';
+      document.cookie = COOKIE_NAME + '=; path=/; max-age=0';
     }
 
     function loadSession() {
-      const raw = localStorage.getItem(SESSION_KEY);
+      var raw = localStorage.getItem(SESSION_KEY);
       if (!raw) return null;
-      try { return JSON.parse(raw); } catch { return null; }
+      try { return JSON.parse(raw); } catch (e) { return null; }
     }
-
-    // ── Page switching ───────────────────────────────────────
 
     function showPage(name) {
       document.querySelectorAll('[data-page]').forEach(function(el) {
@@ -479,8 +393,6 @@
       document.getElementById('password').value = '';
     }
 
-    // ── Login / Logout ───────────────────────────────────────
-
     function doLogin() {
       var email    = document.getElementById('email').value.trim();
       var password = document.getElementById('password').value;
@@ -500,8 +412,6 @@
       showLogin();
     }
 
-    // ── Event listeners ──────────────────────────────────────
-
     document.getElementById('login-btn').addEventListener('click', doLogin);
     document.getElementById('logout-btn').addEventListener('click', doLogout);
 
@@ -511,8 +421,6 @@
         if (loginPage && loginPage.style.display !== 'none') doLogin();
       }
     });
-
-    // ── Init ─────────────────────────────────────────────────
 
     var session = loadSession();
     if (session && session.loggedIn) {
