@@ -103,12 +103,6 @@
 
     /* ── Dashboard page ── */
 
-    .dashboard-header {
-      margin-bottom: 24px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
     .login-success {
       font-size: 22px;
       font-weight: 800;
@@ -127,109 +121,11 @@
       content: '✓ ';
     }
 
-    .user-name {
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    .user-email {
-      font-size: 13px;
-      color: #6e6e73;
-      margin-top: 2px;
-    }
-
-    .status-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: #e8f5e9;
-      color: #1b5e20;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-top: 10px;
-    }
-
-    .status-chip::before {
-      content: '';
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      background: #4caf50;
-      border-radius: 50%;
-    }
-
-    .section-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #6e6e73;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 12px;
-    }
-
-    .info-grid {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .info-tile {
-      background: #f5f5f7;
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-
-    .info-tile .tile-key {
-      font-size: 11px;
-      color: #6e6e73;
-      margin-bottom: 4px;
-    }
-
-    .info-tile .tile-value {
+    .logged-in-msg {
       font-size: 14px;
-      font-weight: 500;
-    }
-
-    .notice-list {
-      list-style: none;
-      margin-bottom: 24px;
-    }
-
-    .notice-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 13px 0;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .notice-item:last-child { border-bottom: none; }
-
-    .notice-date {
-      font-size: 11px;
       color: #6e6e73;
-      white-space: nowrap;
-      padding-top: 2px;
-      min-width: 72px;
-    }
-
-    .notice-title {
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .notice-new {
-      display: inline-block;
-      background: #ff3b30;
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-      vertical-align: middle;
+      text-align: center;
+      margin-bottom: 24px;
     }
 
     .btn-logout {
@@ -304,28 +200,8 @@
   <!-- ══ DASHBOARD PAGE ══ -->
   <div data-page="dashboard" class="card">
 
-    <div class="dashboard-header">
-      <div class="login-success">ログイン成功</div>
-      <div class="user-name">テスト 太郎</div>
-      <div class="user-email">test@test.example</div>
-      <div class="status-chip">ログイン済み</div>
-    </div>
-
-    <div class="section-title">お知らせ一覧</div>
-    <ul class="notice-list">
-      <li class="notice-item">
-        <span class="notice-date">2026/07/01</span>
-        <span class="notice-title">
-          7月の定期メンテナンスのお知らせ
-          <span class="notice-new">NEW</span>
-        </span>
-      </li>
-      <li class="notice-item">
-        <span class="notice-date">2026/06/20</span>
-        <span class="notice-title">夏季休業期間中のサポート対応について</span>
-      </li>
-    </ul>
-
+    <div class="login-success">ログイン成功</div>
+    <p class="logged-in-msg">ログインできました。</p>
     <button class="btn-logout" id="logout-btn">ログアウト</button>
 
   </div>
@@ -369,16 +245,8 @@
       });
     }
 
-    function showDashboard(session) {
+    function showDashboard() {
       showPage('dashboard');
-      if (session && session.loginTime) {
-        var d = new Date(session.loginTime);
-        document.getElementById('last-login-time').textContent =
-          d.toLocaleString('ja-JP', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit',
-          });
-      }
     }
 
     function showLogin() {
@@ -396,7 +264,7 @@
       if (email === VALID_EMAIL && password === VALID_PASSWORD) {
         errorEl.style.display = 'none';
         saveSession();
-        showDashboard(loadSession());
+        showDashboard();
       } else {
         errorEl.style.display = 'block';
       }
